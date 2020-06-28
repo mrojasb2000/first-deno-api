@@ -1,5 +1,5 @@
 import { Request, Response, Body } from "https://deno.land/x/oak/mod.ts";
-import { v4 } from 'https://deno.land/std/uuid/mod.ts';
+import { v4 } from "https://deno.land/std/uuid/mod.ts";
 
 interface User {
   id: string;
@@ -17,28 +17,49 @@ export const getUsers = ({ response }: { response: Response }) => {
     users: users,
   };
 };
-export const getUser = () => {};
 
+export const getUser = async (
+  { params, response }: { params: { id: string }; response: Response }
+) => {
+  
+
+  console.log(params.id);
+
+  users.forEach((item) => {
+      if (item.id === params.id) {
+        response.body = {
+            message: "received",
+            user: item
+        };
+      } else {
+        response.status = 404;
+        response.body = {
+          message: "User not found",
+        }; 
+      }
+  });
+  
+};
 
 export const createUsers = async (
   { request, response }: { request: Request; response: Response },
 ) => {
   const body = await request.body();
 
-  const newUser: User = body.value;
-  newUser.id = v4.generate();
+  if (!request.hasBody) {
+    response.status = 404;
+    response.body = {
+      message: "body is required",
+    };
+  } else {
+    const newUser: User = body.value;
+    newUser.id = v4.generate();
+    users.push(newUser);
 
-  users.push(newUser);
-
-  //console.log(body);
-  /* users.push({
-      name: body.value.name,
-      id: body.value.id
-  }) */
-
-  response.body = {
-      message: 'New user created'
-  };
+    response.body = {
+      message: "New user created",
+    };
+  }
 };
 
 export const updateUsers = () => {};
