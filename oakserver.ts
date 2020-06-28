@@ -5,6 +5,7 @@ const PORT = 3000
 const app: Application = new Application();
 
 app.use(router.routes());
+app.use(router.allowedMethods());
 
 console.log("Server running on port", PORT);
 
