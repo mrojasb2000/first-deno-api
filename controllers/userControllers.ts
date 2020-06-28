@@ -19,21 +19,16 @@ export const getUsers = ({ response }: { response: Response }) => {
 };
 export const getUser = () => {};
 
-interface userBody {
-    name: string
-}
 
 export const createUsers = async (
   { request, response }: { request: Request; response: Response },
 ) => {
   const body = await request.body();
 
-  const newUser: userBody = body.value;
+  const newUser: User = body.value;
+  newUser.id = v4.generate();
 
-  users.push({
-    id: v4.generate(),  
-    name: newUser.name
-  })
+  users.push(newUser);
 
   //console.log(body);
   /* users.push({
