@@ -19,26 +19,21 @@ export const getUsers = ({ response }: { response: Response }) => {
 };
 
 export const getUser = async (
-  { params, response }: { params: { id: string }; response: Response }
+  { params, response }: { params: { id: string }; response: Response },
 ) => {
-  
-
-  console.log(params.id);
-
   users.forEach((item) => {
-      if (item.id === params.id) {
-        response.body = {
-            message: "received",
-            user: item
-        };
-      } else {
-        response.status = 404;
-        response.body = {
-          message: "User not found",
-        }; 
-      }
+    if (item.id === params.id) {
+      response.body = {
+        message: "received",
+        user: item,
+      };
+    } else {
+      response.status = 404;
+      response.body = {
+        message: "User not found",
+      };
+    }
   });
-  
 };
 
 export const createUsers = async (
