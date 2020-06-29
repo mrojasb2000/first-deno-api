@@ -58,24 +58,55 @@ export const createUsers = async (
   }
 };
 
-export const updateUsers = () => {};
+export const updateUsers = async (
+  { request, response, params }: {
+    request: Request;
+    response: Response;
+    params: { id: string };
+  },
+) => {
+  const userFound = users.find((user) => user.id === params.id);
+  if (userFound) {
+    const body = await request.body();
+    const userUpdated = body.value;
+
+    users = users.map((user) =>
+      user.id === params.id
+        ? {
+          ...user,
+          ...userUpdated,
+        }
+        : user
+    );
+
+    response.status = 200;
+    response.body = {
+      message: "User updated",
+    };
+  } else {
+    response.status = 404;
+    response.body = {
+      message: "User not found",
+    };
+  }
+};
 
 export const deleteUsers = (
   { params, response }: { params: { id: string }; response: Response },
 ) => {
-    console.log(params.id);
-    const userFound = users.find((user) => user.id === params.id);
+  console.log(params.id);
+  const userFound = users.find((user) => user.id === params.id);
 
-    if(userFound){
-        users = users.filter((user) => user.id !== params.id);
-        response.status = 200;
-        response.body = {
-            message: 'User removed'
-        }
-    } else {
-        response.status = 404;
-        response.body = {
-            message: 'User not found'
-        }
-    }
+  if (userFound) {
+    users = users.filter((user) => user.id !== params.id);
+    response.status = 200;
+    response.body = {
+      message: "User removed",
+    };
+  } else {
+    response.status = 404;
+    response.body = {
+      message: "User not found",
+    };
+  }
 };
