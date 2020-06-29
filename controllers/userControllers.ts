@@ -21,19 +21,21 @@ export const getUsers = ({ response }: { response: Response }) => {
 export const getUser = async (
   { params, response }: { params: { id: string }; response: Response },
 ) => {
-  users.forEach((item) => {
-    if (item.id === params.id) {
-      response.body = {
-        message: "received",
-        user: item,
-      };
-    } else {
-      response.status = 404;
-      response.body = {
-        message: "User not found",
-      };
-    }
-  });
+
+  const userFound = users.find((user) => user.id === params.id);
+ 
+  if (userFound) {
+    response.status = 200;
+    response.body = {
+      message: "received",
+      user: userFound,
+    };
+  } else {
+    response.status = 404;
+    response.body = {
+      message: "User not found",
+    };
+  }
 };
 
 export const createUsers = async (
